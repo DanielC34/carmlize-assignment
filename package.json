@@ -1,5 +1,5 @@
 {
-  "name": "zync-erc20",
+  "name": "carmlize",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,22 +7,16 @@
     "node": ">=18"
   },
   "workspaces": [
-    "client",
-    "contracts"
+    "client"
   ],
   "scripts": {
     "prestart": "node --input-type=module -e \"import fs from 'node:fs'; fs.rmSync('client/.next',{recursive:true,force:true})\"",
-    "chain": "npx hardhat node --config contracts/hardhat.config.cjs",
-    "deploy": "npx hardhat run contracts/scripts/deploy.cjs --network localhost --config contracts/hardhat.config.cjs",
-    "compile": "node scripts/compile-and-dev.mjs",
-    "test:contracts": "node scripts/test-contracts.mjs",
-    "dev": "npm run dev -w zync-client",
-    "start": "npm run start -w zync-client",
-    "client:build": "npm run build -w zync-client",
+    "dev": "npm run dev -w carmlize-client",
+    "start": "npm run start -w carmlize-client",
+    "client:build": "npm run build -w carmlize-client",
     "test": "node --test client/test/*.test.js"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.2",
     "klinecharts": "^10.0.0-beta1",
     "lightweight-charts": "^5.1.0",
     "next": "14.2.33",
@@ -33,17 +27,15 @@
   },
   "devDependencies": {
     "@metamask/logo": "^4.0.0",
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@rainbow-me/rainbowkit": "^2.2.10",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.5.0",
-    "hardhat": "^2.22.0",
     "postcss": "^8.5.10",
     "simple-icons": "^14.15.0",
     "tailwindcss": "^3.4.17",
-    "animatecss-tailwind-adapter":"^2.0.6",
+    "animatecss-tailwind-adapter": "^2.0.6",
     "typescript": "~5.6.3"
   }
 }

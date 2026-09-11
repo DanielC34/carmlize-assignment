@@ -27,7 +27,7 @@ function Loading() {
     <div className="flex min-h-screen items-center justify-center text-white/70">
       <div className="flex flex-col items-center gap-3">
         <div className="spinner" />
-        <p className="m-0 text-sm tracking-wide">Loading AureLexa…</p>
+        <p className="m-0 text-sm tracking-wide">Loading Carmlize…</p>
       </div>
     </div>
   );
@@ -62,14 +62,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const chain = defineChain({
     id: cfg.chain_id,
-    name: "Zync network",
+    name: "Ethereum",
     nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-    rpcUrls: { default: { http: [cfg.rpc_url] } },
+    rpcUrls: {
+      default: {
+        http: [cfg.rpc_url || "https://ethereum.publicnode.com"],
+      },
+    },
   });
 
   return (
     <ConfigProvider value={cfg}>
-      <WalletProvider chain={chain} rpcUrl={cfg.rpc_url}>
+      <WalletProvider chain={chain} rpcUrl={cfg.rpc_url || "https://ethereum.publicnode.com"}>
         <FavoritesProvider>
           <MarketsStreamProvider>
             <PaperTradeProvider>

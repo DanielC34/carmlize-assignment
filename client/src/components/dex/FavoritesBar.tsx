@@ -24,10 +24,10 @@ export function FavoritesBar({ currentMarketId }: { currentMarketId: string }) {
         return (
           <button key={m.id} type="button" onClick={() => router.push(`/trade/${m.id}`)}
             className={`shrink-0 rounded px-2.5 py-1 font-mono text-xs transition-colors ${
-              active ? "bg-[rgba(0,217,192,0.12)] text-[#00d9c0]" : "text-white/55 hover:bg-white/[0.05] hover:text-white"
+              active ? "bg-[rgba(56,189,248,0.12)] text-[#38bdf8]" : "text-white/55 hover:bg-white/[0.05] hover:text-white"
             }`}>
             <span className="font-semibold">{m.pair}</span>
-            <span className={`ml-1.5 ${m.change_24h_pct >= 0 ? "text-[#26a69a]" : "text-[#ef5350]"}`}>
+            <span className={`ml-1.5 ${m.change_24h_pct >= 0 ? "text-[#3b82f6]" : "text-[#ef5350]"}`}>
               {m.change_24h_pct >= 0 ? "+" : ""}{m.change_24h_pct.toFixed(2)}%
             </span>
           </button>

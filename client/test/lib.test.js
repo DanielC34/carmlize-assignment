@@ -6,6 +6,7 @@ import fs from "node:fs/promises";
 import { MatchingEngine, MatchError } from "../lib/matchingEngine.js";
 import { formatPrice, quoteDp } from "../lib/merge.js";
 import { buildDashboardSummary } from "../lib/dashboardSummary.js";
+import { buildHeuristicBrief, generateMarketBrief } from "../lib/aiBrief.js";
 
 describe("merge.formatPrice", () => {
   it("formats prices to the requested decimals", () => {
@@ -17,7 +18,7 @@ describe("merge.formatPrice", () => {
 
 describe("MatchingEngine", () => {
   async function tempEngine() {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "zync-match-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "carmlize-match-"));
     const file = path.join(dir, "orders.json");
     return { engine: new MatchingEngine(file), dir };
   }
@@ -97,5 +98,36 @@ describe("buildDashboardSummary", () => {
     assert.equal(summary.feed_connected, true);
     assert.equal(summary.top_gainers[0].id, "a");
     assert.equal(summary.top_losers[0].id, "b");
+  });
+});
+
+describe("aiBrief", () => {
+  const sample = {
+    active_markets: 2,
+    volume_24h_total: 1_000_000,
+    open_orders_count: 1,
+    feed_connected: false,
+    top_gainers: [
+      { id: "btc-usdt", pair: "BTC-USDT", base: "BTC", quote: "USDT", mark_price: 1, change_24h_pct: 4.2, volume_24h: 500000 },
+    ],
+    top_losers: [
+      { id: "eth-usdt", pair: "ETH-USDT", base: "ETH", quote: "USDT", mark_price: 1, change_24h_pct: -2.1, volume_24h: 400000 },
+    ],
+  };
+
+  it("builds a heuristic brief from desk metrics", () => {
+    const brief = buildHeuristicBrief(sample, "What is the risk?");
+    assert.match(brief, /BTC-USDT/);
+    assert.match(brief, /ETH-USDT/);
+    assert.match(brief, /risk/i);
+  });
+
+  it("generateMarketBrief falls back without OPENAI_API_KEY", async () => {
+    const prev = process.env.OPENAI_API_KEY;
+    delete process.env.OPENAI_API_KEY;
+    const out = await generateMarketBrief(sample, {});
+    assert.equal(out.source, "heuristic");
+    assert.match(out.brief, /Carmlize desk brief/);
+    if (prev != null) process.env.OPENAI_API_KEY = prev;
   });
 });

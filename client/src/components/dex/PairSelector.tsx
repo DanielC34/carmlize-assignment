@@ -68,7 +68,7 @@ export function PairSelector({ currentPair, currentBase, maxLeverage }: Props) {
           <path d="M6 9l6 6 6-6"/>
         </svg>
       </button>
-      <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-[rgba(0,217,192,0.15)] text-[#00d9c0]">
+      <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-[rgba(56,189,248,0.15)] text-[#38bdf8]">
         {maxLeverage}x
       </span>
 
@@ -100,10 +100,10 @@ export function PairSelector({ currentPair, currentBase, maxLeverage }: Props) {
                   </button>
                   <TokenIcon symbol={m.base} size={20} />
                   <span className="font-medium text-white">{m.pair}</span>
-                  <span className="rounded px-1 py-0.5 text-[9px] font-semibold bg-[rgba(0,217,192,0.12)] text-[#00d9c0]">{m.max_leverage}x</span>
+                  <span className="rounded px-1 py-0.5 text-[9px] font-semibold bg-[rgba(56,189,248,0.12)] text-[#38bdf8]">{m.max_leverage}x</span>
                 </button>
                 <span className="font-mono text-sm text-right text-white/85">{fmtPrice(m.mark_price)}</span>
-                <span className={`font-mono text-sm text-right ${m.change_24h_pct >= 0 ? "text-[#26a69a]" : "text-[#ef5350]"}`}>
+                <span className={`font-mono text-sm text-right ${m.change_24h_pct >= 0 ? "text-[#3b82f6]" : "text-[#ef5350]"}`}>
                   {m.change_24h_pct >= 0 ? "+" : ""}{m.change_24h_pct.toFixed(2)}%
                 </span>
                 <span className="w-16 font-mono text-xs text-right text-white/45">

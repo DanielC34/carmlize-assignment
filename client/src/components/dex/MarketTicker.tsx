@@ -47,10 +47,10 @@ export function MarketTicker() {
         <span className="relative flex h-2 w-2">
           {connected && (
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-              style={{ background: "#3dffa0" }} />
+              style={{ background: "#60a5fa" }} />
           )}
           <span className="relative inline-flex h-2 w-2 rounded-full"
-            style={{ background: connected ? "#3dffa0" : "#ef5350" }} />
+            style={{ background: connected ? "#60a5fa" : "#ef5350" }} />
         </span>
         <span style={{ color: connected ? "rgba(255,255,255,0.4)" : "#ef5350" }}>
           {connected ? "Live" : "Off"}
@@ -70,16 +70,16 @@ export function MarketTicker() {
                 {icon
                   ? <img src={icon} alt={m.base} width={14} height={14} className="rounded-full shrink-0" />
                   : <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[8px] font-bold"
-                      style={{ background: "rgba(61,255,160,0.15)", color: "#3dffa0" }}>
+                      style={{ background: "rgba(96,165,250,0.15)", color: "#60a5fa" }}>
                       {m.base.slice(0, 1)}
                     </span>
                 }
                 <span className="font-semibold" style={{ color: "rgba(255,255,255,0.8)" }}>{m.pair}</span>
                 <span className="transition-colors duration-500"
-                  style={{ color: flash === "up" ? "#3dffa0" : flash === "down" ? "#ef5350" : "rgba(255,255,255,0.6)" }}>
+                  style={{ color: flash === "up" ? "#60a5fa" : flash === "down" ? "#ef5350" : "rgba(255,255,255,0.6)" }}>
                   {fmt(m.mark_price, m.mark_price < 10 ? 6 : 2)}
                 </span>
-                <span style={{ color: m.change_24h_pct >= 0 ? "#3dffa0" : "#ef5350" }}>
+                <span style={{ color: m.change_24h_pct >= 0 ? "#60a5fa" : "#ef5350" }}>
                   {m.change_24h_pct >= 0 ? "+" : ""}{m.change_24h_pct.toFixed(2)}%
                 </span>
               </span>

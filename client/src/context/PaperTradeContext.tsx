@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
-const LS_KEY = "zync_paper_v1";
+const LS_KEY = "apex_paper_v1";
 
 export type PaperPosition = {
   id: string;

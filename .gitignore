@@ -1,7 +1,6 @@
 node_modules
 dist
 .env
-.npmrc.local
 package-lock.json
 
 # Next.js build output
@@ -11,11 +10,10 @@ client/out/
 # Vite
 client/vite.config.ts.timestamp-*.mjs
 
-# Hardhat
-contracts/cache
-contracts/artifacts
-contracts/typechain-types
-
 # Temp files
 temp_*.txt
 MIGRATION_*.md
+
+
+AI_ENGINEER.md
+FULLSTACK_DEVELOPER.md

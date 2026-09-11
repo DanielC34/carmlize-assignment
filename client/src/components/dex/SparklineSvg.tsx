@@ -14,7 +14,7 @@ export function SparklineSvg({ values, positive }: Props) {
       return `${x},${y}`;
     })
     .join(" ");
-  const stroke = positive === false ? "#ff5c5c" : positive === true ? "#3dd68c" : "#00d9c0";
+  const stroke = positive === false ? "#ff5c5c" : positive === true ? "#60a5fa" : "#38bdf8";
   return (
     <svg className="h-7 w-20" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
       <polyline fill="none" stroke={stroke} strokeWidth="1.2" points={pts} vectorEffect="non-scaling-stroke" />

@@ -8,13 +8,13 @@ import { SparklineSvg } from "../components/dex/SparklineSvg";
 import { TOKEN_ICONS } from "../components/dex/tokenIcons";
 import type { MarketsOverview } from "../types/markets";
 
-const PREFS_KEY = "zync_markets_prefs_v1";
+const PREFS_KEY = "apex_markets_prefs_v1";
 
 function TokenIcon({ symbol }: { symbol: string }) {
   const src = TOKEN_ICONS[symbol];
   if (!src) return (
     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-      style={{ background: "rgba(61,255,160,0.1)", color: "#3dffa0" }}>
+      style={{ background: "rgba(96,165,250,0.1)", color: "#60a5fa" }}>
       {symbol.slice(0, 2)}
     </div>
   );
@@ -67,7 +67,7 @@ function loadPrefs(): Prefs {
 
 function ConnBadge({ status }: { status: "connected" | "reconnecting" | "disconnected" }) {
   const map = {
-    connected: { label: "Connected", color: "#3dffa0" },
+    connected: { label: "Connected", color: "#60a5fa" },
     reconnecting: { label: "Reconnecting", color: "#fbbf24" },
     disconnected: { label: "Disconnected", color: "#ef5350" },
   } as const;
@@ -163,8 +163,8 @@ export function MarketsPage() {
 
   const SortIcon = ({ k }: { k: SortKey }) => (
     <span className="ml-1 inline-flex flex-col leading-[1] text-[9px] align-middle">
-      <span style={{ color: sort.key === k && sort.dir === "asc" ? "#3dffa0" : "rgba(255,255,255,0.2)" }}>▲</span>
-      <span style={{ color: sort.key === k && sort.dir === "desc" ? "#3dffa0" : "rgba(255,255,255,0.2)" }}>▼</span>
+      <span style={{ color: sort.key === k && sort.dir === "asc" ? "#60a5fa" : "rgba(255,255,255,0.2)" }}>▲</span>
+      <span style={{ color: sort.key === k && sort.dir === "desc" ? "#60a5fa" : "rgba(255,255,255,0.2)" }}>▼</span>
     </span>
   );
 
@@ -173,7 +173,7 @@ export function MarketsPage() {
       className={`px-4 py-3.5 text-xs font-semibold uppercase tracking-wider whitespace-nowrap select-none border-b
         ${k ? "cursor-pointer" : ""}
         ${right ? "text-right" : "text-left"}`}
-      style={{ borderColor: "rgba(255,255,255,0.07)", color: sort.key === k ? "#3dffa0" : "rgba(255,255,255,0.45)" }}>
+      style={{ borderColor: "rgba(255,255,255,0.07)", color: sort.key === k ? "#60a5fa" : "rgba(255,255,255,0.45)" }}>
       {label}{k && <SortIcon k={k} />}
     </th>
   );
@@ -228,7 +228,7 @@ export function MarketsPage() {
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <p className="text-xs uppercase tracking-widest mb-1.5" style={{ color: "rgba(255,255,255,0.4)" }}>{label}</p>
                 <p className="font-mono text-xl font-bold"
-                  style={{ color: accent ? (pos ? "#3dffa0" : "#ef5350") : "#ffffff" }}>
+                  style={{ color: accent ? (pos ? "#60a5fa" : "#ef5350") : "#ffffff" }}>
                   {value}
                 </p>
               </div>
@@ -243,7 +243,7 @@ export function MarketsPage() {
               <button key={t} type="button" onClick={() => setTab(t)}
                 className="rounded-lg px-4 py-1.5 text-sm font-medium transition-all"
                 style={tab === t
-                  ? { background: "linear-gradient(135deg,#3dffa0,#38bdf8)", color: "#060c18", fontWeight: 700 }
+                  ? { background: "linear-gradient(135deg,#60a5fa,#38bdf8)", color: "#060c18", fontWeight: 700 }
                   : { color: "rgba(255,255,255,0.45)" }}>
                 {t === "all" ? "All Markets" : "Watchlist"}
               </button>
@@ -290,7 +290,7 @@ export function MarketsPage() {
                 <tr>
                   <td colSpan={9} className="px-4 py-14 text-center text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
                     <span className="inline-flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#3dffa0" }} />
+                      <span className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#60a5fa" }} />
                       Loading markets…
                     </span>
                   </td>
@@ -305,7 +305,7 @@ export function MarketsPage() {
                         <button
                           type="button"
                           onClick={() => setQ("")}
-                          className="text-xs font-semibold text-[#3dffa0] hover:underline"
+                          className="text-xs font-semibold text-[#60a5fa] hover:underline"
                         >
                           Clear search
                         </button>
@@ -321,7 +321,7 @@ export function MarketsPage() {
                   <tr key={m.id} onClick={() => router.push(`/trade/${m.id}`)}
                     className="group cursor-pointer transition-colors"
                     style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(61,255,160,0.03)")}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(96,165,250,0.03)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "")}>
 
                     <td className="px-4 py-3.5 text-sm tabular-nums" style={{ color: "rgba(255,255,255,0.3)" }}>{idx + 1}</td>
@@ -334,15 +334,9 @@ export function MarketsPage() {
                           <span className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>/{m.quote}</span>
                         </div>
                         <span className="rounded-md px-1.5 py-0.5 text-xs font-semibold"
-                          style={{ background: "rgba(61,255,160,0.1)", color: "#3dffa0", border: "1px solid rgba(61,255,160,0.2)" }}>
+                          style={{ background: "rgba(96,165,250,0.1)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.2)" }}>
                           {m.max_leverage}×
                         </span>
-                        {m.id === "zync-eth" && (
-                          <span className="rounded-md px-1.5 py-0.5 text-xs font-semibold"
-                            style={{ background: "rgba(251,191,36,0.1)", color: "#fbbf24", border: "1px solid rgba(251,191,36,0.2)" }}>
-                            SOON
-                          </span>
-                        )}
                       </div>
                     </td>
 
@@ -351,7 +345,7 @@ export function MarketsPage() {
                     </td>
 
                     <td className="px-4 py-3.5 text-right font-mono text-sm tabular-nums font-semibold"
-                      style={{ color: pos ? "#3dffa0" : "#ef5350" }}>
+                      style={{ color: pos ? "#60a5fa" : "#ef5350" }}>
                       {pos ? "+" : ""}{m.change_24h_pct.toFixed(2)}%
                     </td>
 
@@ -373,13 +367,11 @@ export function MarketsPage() {
                     </td>
 
                     <td className="px-4 py-3.5 text-center text-lg">
-                      {m.id !== "zync-eth" && (
-                        <button type="button" onClick={e => toggleFavRow(m.id, e)}
-                          className="transition-colors leading-none"
-                          style={{ color: isFav ? "#fbbf24" : "rgba(255,255,255,0.15)" }}>
-                          {isFav ? "★" : "☆"}
-                        </button>
-                      )}
+                      <button type="button" onClick={e => toggleFavRow(m.id, e)}
+                        className="transition-colors leading-none"
+                        style={{ color: isFav ? "#fbbf24" : "rgba(255,255,255,0.15)" }}>
+                        {isFav ? "★" : "☆"}
+                      </button>
                     </td>
                   </tr>
                 );

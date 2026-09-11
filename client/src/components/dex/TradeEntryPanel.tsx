@@ -79,13 +79,13 @@ export function TradeEntryPanel({
     }
   }
 
-  const inputCls = "w-full rounded-md border border-white/[0.06] bg-[#060809] px-3 py-2 font-mono text-sm text-white outline-none focus:border-[rgba(0,217,192,0.4)]";
+  const inputCls = "w-full rounded-md border border-white/[0.06] bg-[#060809] px-3 py-2 font-mono text-sm text-white outline-none focus:border-[rgba(56,189,248,0.4)]";
 
   return (
     <div className="flex flex-col gap-4 border-l border-white/[0.06] bg-[#121519] p-3">
       {/* Leverage */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded border border-[#00d9c0] px-2 py-0.5 text-[10px] font-semibold text-[#00d9c0]">Cross</span>
+        <span className="rounded border border-[#38bdf8] px-2 py-0.5 text-[10px] font-semibold text-[#38bdf8]">Cross</span>
         <span className="text-[10px] text-white/45">Leverage</span>
         <input type="range" min={1} max={50} value={leverage} onChange={(e) => setLeverage(Number(e.target.value))} className="w-24" />
         <span className="font-mono text-xs">{leverage}x</span>
@@ -94,7 +94,7 @@ export function TradeEntryPanel({
       {/* Buy / Sell */}
       <div className="grid grid-cols-2 gap-1.5">
         <button type="button" onClick={() => setSide("buy")}
-          className={`rounded py-2 text-sm font-semibold transition-colors ${side === "buy" ? "bg-[#3dd68c] text-black" : "bg-[rgba(61,214,140,0.2)] text-[#3dd68c]"}`}>
+          className={`rounded py-2 text-sm font-semibold transition-colors ${side === "buy" ? "bg-[#60a5fa] text-black" : "bg-[rgba(96,165,250,0.2)] text-[#60a5fa]"}`}>
           Buy / Long
         </button>
         <button type="button" onClick={() => setSide("sell")}
@@ -109,7 +109,7 @@ export function TradeEntryPanel({
           <button key={t} type="button" disabled={t === "stop"}
             onClick={() => t !== "stop" && setOrderType(t as "market" | "limit")}
             className={`flex-1 rounded border py-1.5 text-xs capitalize transition-colors disabled:opacity-35 ${
-              orderType === t ? "border-[#00d9c0] text-[#00d9c0]" : "border-white/[0.06] bg-[#060809] text-white/45"
+              orderType === t ? "border-[#38bdf8] text-[#38bdf8]" : "border-white/[0.06] bg-[#060809] text-white/45"
             }`}>
             {t}
           </button>
@@ -141,7 +141,7 @@ export function TradeEntryPanel({
       {/* Submit */}
       <button type="button" disabled={!markPrice || submitting} onClick={() => void onSubmit()}
         className={`w-full rounded py-2.5 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-45 ${
-          side === "buy" ? "bg-[#3dd68c] text-black" : "bg-[#ff5c5c] text-white"
+          side === "buy" ? "bg-[#60a5fa] text-black" : "bg-[#ff5c5c] text-white"
         }`}>
         {!connected ? "Connect wallet" : submitting ? "Submitting…" : orderType === "market" ? `Market ${side}` : `Place limit ${side}`}
       </button>

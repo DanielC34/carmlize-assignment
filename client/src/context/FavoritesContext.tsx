@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
-const FAV_KEY = "zync_trade_favs";
+const FAV_KEY = "apex_trade_favs";
 
 type FavCtx = {
   favs: Set<string>;

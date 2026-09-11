@@ -110,20 +110,6 @@ export function TradePage() {
     ? ((parseFloat(detail.book.asks[0].price) - parseFloat(detail.book.bids[0].price)) / mid) * 100
     : 0;
 
-  if (marketId === "zync-eth") {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 p-8 text-center text-white/60">
-        <div className="text-5xl">🚀</div>
-        <h2 className="m-0 text-2xl font-bold text-white">ZYNC — Coming Soon</h2>
-        <p className="m-0 max-w-md leading-relaxed">
-          The ZYNC token is not yet launched. Once deployed on a live network, trading will be available here.
-        </p>
-        <button type="button" onClick={() => router.push("/trade/btc-usdt")}
-          className="mt-2 text-sm text-[#00d9c0] hover:underline">← Back to Markets</button>
-      </div>
-    );
-  }
-
   return (
     <div className="box-border flex flex-col"
       style={{ height: "calc(100dvh - 5.2rem)", maxWidth: "100%", minHeight: "700px", overflowY: "auto" }}>
@@ -145,7 +131,7 @@ export function TradePage() {
           <div className="font-mono text-2xl font-bold">{fmtPrice(mark, quote)}</div>
           {[
             { label: "Mark",          value: fmtPrice(mark, quote) },
-            { label: "24h Change",    value: `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`, cls: change >= 0 ? "text-[#26a69a]" : "text-[#ef5350]" },
+            { label: "24h Change",    value: `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`, cls: change >= 0 ? "text-[#3b82f6]" : "text-[#ef5350]" },
             { label: "24h Volume",    value: `$${(vol / 1e6).toFixed(2)}M` },
             { label: "Open Interest", value: `$${(oi / 1e6).toFixed(2)}M` },
             { label: "1h Funding",    value: `${(funding * 100).toFixed(4)}%` },
@@ -196,7 +182,7 @@ export function TradePage() {
             </div>
             {detail?.book?.bids?.map((r, i) => (
               <div key={`b-${i}`} className="grid grid-cols-3 px-3 py-0.5 hover:bg-white/[0.02]">
-                <span className="text-[#26a69a]">{r.price}</span>
+                <span className="text-[#3b82f6]">{r.price}</span>
                 <span className="text-right text-white/70">{r.size}</span>
                 <span className="text-right text-white/50">{r.total}</span>
               </div>
@@ -215,7 +201,7 @@ export function TradePage() {
               const ts = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
               return (
                 <div key={`${t.ts}-${i}`} className="grid grid-cols-3 px-3 py-0.5 hover:bg-white/[0.02]">
-                  <span className={t.side === "buy" ? "text-[#26a69a]" : "text-[#ef5350]"}>{t.price}</span>
+                  <span className={t.side === "buy" ? "text-[#3b82f6]" : "text-[#ef5350]"}>{t.price}</span>
                   <span className="text-right text-white/70">{t.size}</span>
                   <span className="text-right text-white/40">{ts}</span>
                 </div>
@@ -238,7 +224,7 @@ export function TradePage() {
               ["history",   "Trade notes"],
             ] as const).map(([t, label]) => (
               <button key={t} type="button" onClick={() => setBottomTab(t)}
-                className={`whitespace-nowrap border-none bg-transparent px-3 py-1.5 font-sans text-xs cursor-pointer transition-colors ${bottomTab === t ? "border-b-2 border-[#00d9c0] text-[#00d9c0]" : "text-white/45"}`}>
+                className={`whitespace-nowrap border-none bg-transparent px-3 py-1.5 font-sans text-xs cursor-pointer transition-colors ${bottomTab === t ? "border-b-2 border-[#38bdf8] text-[#38bdf8]" : "text-white/45"}`}>
                 {label}
               </button>
             ))}
@@ -257,15 +243,15 @@ export function TradePage() {
                     return (
                       <tr key={p.id} className="border-b border-white/[0.03]">
                         <td className="px-2 py-1">{p.pair}</td>
-                        <td className={`px-2 py-1 ${p.side === "long" ? "text-[#26a69a]" : "text-[#ef5350]"}`}>{p.side}</td>
+                        <td className={`px-2 py-1 ${p.side === "long" ? "text-[#3b82f6]" : "text-[#ef5350]"}`}>{p.side}</td>
                         <td className="px-2 py-1 font-mono">{p.sizeBase.toFixed(4)}</td>
                         <td className="px-2 py-1 font-mono">{fmtPrice(p.entryPrice, quote)}</td>
                         <td className="px-2 py-1 font-mono">{fmtPrice(mark, quote)}</td>
                         <td className="px-2 py-1 font-mono">{p.marginQuote.toFixed(4)}</td>
-                        <td className={`px-2 py-1 font-mono ${pnl >= 0 ? "text-[#26a69a]" : "text-[#ef5350]"}`}>{pnl.toFixed(4)}</td>
+                        <td className={`px-2 py-1 font-mono ${pnl >= 0 ? "text-[#3b82f6]" : "text-[#ef5350]"}`}>{pnl.toFixed(4)}</td>
                         <td className="px-2 py-1">
                           <button type="button" onClick={() => closePosition(p.id, mark)}
-                            className="rounded border border-[#00d9c0] bg-transparent px-2 py-0.5 text-[10px] text-[#00d9c0] hover:bg-[rgba(0,217,192,0.15)]">Close</button>
+                            className="rounded border border-[#38bdf8] bg-transparent px-2 py-0.5 text-[10px] text-[#38bdf8] hover:bg-[rgba(56,189,248,0.15)]">Close</button>
                         </td>
                       </tr>
                     );
@@ -290,7 +276,7 @@ export function TradePage() {
                       <td className="px-2 py-1">{o.status}</td>
                       <td className="px-2 py-1">
                         <button type="button" onClick={() => void cancelServerOrder(o.id)}
-                          className="rounded border border-[#00d9c0] bg-transparent px-2 py-0.5 text-[10px] text-[#00d9c0] hover:bg-[rgba(0,217,192,0.15)]">Cancel</button>
+                          className="rounded border border-[#38bdf8] bg-transparent px-2 py-0.5 text-[10px] text-[#38bdf8] hover:bg-[rgba(56,189,248,0.15)]">Cancel</button>
                       </td>
                     </tr>
                   ))}

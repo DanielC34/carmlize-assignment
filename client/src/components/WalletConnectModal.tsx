@@ -56,10 +56,10 @@ export function WalletConnectModal() {
                   <li key={e.info.uuid}>
                     <button type="button" disabled={connectingId !== null}
                       onClick={() => void connectEip6963Provider(e)}
-                      className="mb-1.5 flex w-full items-center gap-3 rounded-lg border border-transparent bg-white/[0.03] px-3 py-2.5 text-left text-white transition-colors hover:border-[rgba(0,217,192,0.25)] hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-45">
+                      className="mb-1.5 flex w-full items-center gap-3 rounded-lg border border-transparent bg-white/[0.03] px-3 py-2.5 text-left text-white transition-colors hover:border-[rgba(56,189,248,0.25)] hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-45">
                       <img src={e.info.icon} alt="" width={32} height={32} className="rounded-lg object-contain" />
                       <span className="text-sm font-medium">{e.info.name}</span>
-                      {connectingId === `eip6963:${e.info.uuid}` && <span className="ml-auto text-[#00d9c0] font-bold">…</span>}
+                      {connectingId === `eip6963:${e.info.uuid}` && <span className="ml-auto text-[#38bdf8] font-bold">…</span>}
                     </button>
                   </li>
                 ))}
@@ -76,10 +76,10 @@ export function WalletConnectModal() {
                   <li key={w.id}>
                     <button type="button" disabled={connectingId !== null && !busy}
                       onClick={() => void connectWalletId(w.id)}
-                      className="mb-1.5 flex w-full items-center gap-3 rounded-lg border border-transparent bg-white/[0.03] px-3 py-2.5 text-left text-white transition-colors hover:border-[rgba(0,217,192,0.25)] hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-45">
+                      className="mb-1.5 flex w-full items-center gap-3 rounded-lg border border-transparent bg-white/[0.03] px-3 py-2.5 text-left text-white transition-colors hover:border-[rgba(56,189,248,0.25)] hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-45">
                       <WalletBrandIcon id={w.id} />
                       <span className="text-sm font-medium">{w.name}</span>
-                      {busy && <span className="ml-auto text-[#00d9c0] font-bold">…</span>}
+                      {busy && <span className="ml-auto text-[#38bdf8] font-bold">…</span>}
                     </button>
                   </li>
                 );
@@ -90,9 +90,9 @@ export function WalletConnectModal() {
 
         <p className="mx-5 mb-4 mt-3 text-center text-[10px] text-white/35">
           By connecting you agree to our{" "}
-          <a href="" target="_blank" rel="noreferrer" className="text-[#00d9c0] hover:underline">Terms</a>
+          <a href="" target="_blank" rel="noreferrer" className="text-[#38bdf8] hover:underline">Terms</a>
           {" "}&amp;{" "}
-          <a href="" target="_blank" rel="noreferrer" className="text-[#00d9c0] hover:underline">Privacy</a>
+          <a href="" target="_blank" rel="noreferrer" className="text-[#38bdf8] hover:underline">Privacy</a>
         </p>
       </div>
     </div>
