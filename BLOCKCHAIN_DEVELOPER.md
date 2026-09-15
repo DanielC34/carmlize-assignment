@@ -1,6 +1,6 @@
 # Carmlize — Blockchain Developer Take-Home
 
-**Audience:** Blockchain / on-chain engineers  
+**Audience:** Blockchain / on-chain engineers 
 **Product:** Carmlize — AI-powered crypto market intelligence  
 **Repo context:** This is a **test project for developer experience**. Your job is to add an **on-chain intelligence layer** (read + analyze blockchain data) that sits next to live desk metrics — grounded, testable, and useful on the dashboard.
 
