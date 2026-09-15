@@ -1,4 +1,4 @@
-# Carmlize — Frontend & Backend Tasks
+# Carmlize
 
 Carmlize is an AI-powered crypto market intelligence platform. The goal is to combine **real-time market data**, **blockchain data**, and **AI** so users can understand what is happening in the market and make better decisions faster — collect data in one place, analyze it, and turn it into useful signals and insights.
 
