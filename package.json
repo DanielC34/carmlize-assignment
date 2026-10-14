@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=18.18.0"
   },
   "workspaces": [
     "client"
   ],
+  "overrides": {
+    "postcss": "$postcss"
+  },
   "scripts": {
     "prestart": "node --input-type=module -e \"import fs from 'node:fs'; fs.rmSync('client/.next',{recursive:true,force:true})\"",
     "dev": "npm run dev -w carmlize-client",
@@ -19,7 +22,7 @@
   "dependencies": {
     "klinecharts": "^10.0.0-beta1",
     "lightweight-charts": "^5.1.0",
-    "next": "14.2.33",
+    "next": "15.5.27",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "viem": "^2.21.19",
@@ -35,7 +38,6 @@
     "postcss": "^8.5.10",
     "simple-icons": "^14.15.0",
     "tailwindcss": "^3.4.17",
-    "animatecss-tailwind-adapter": "^2.0.6",
     "typescript": "~5.6.3"
   }
 }

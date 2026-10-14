@@ -18,7 +18,7 @@ This repository is a **Next.js full-stack app** — React UI, REST API routes, a
 
 ## Getting Started
 
-You need **Node.js 18+** and **npm**.
+You need **Node.js 18.18+** and **npm**.
 
 ```bash
 # 1. Clone the repo
@@ -68,7 +68,7 @@ client/
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS |
+| Frontend | Next.js 15 (App Router), React 18, TypeScript, Tailwind CSS |
 | API | Next.js Route Handlers (`app/api/`) |
 | Real-time | WebSocket (`/ws/markets`) via `server.js` + `lib/marketEngine.js` |
 | Data | In-memory matching engine with JSON file persistence |
@@ -84,12 +84,24 @@ client/
 | `GET/POST /api/v1/ai/brief` | AI market brief from live desk metrics (`OPENAI_API_KEY` optional) |
 | `GET /api/v1/markets` | Full markets overview |
 | `GET /api/v1/markets/:id` | Single market detail (order book, trades) |
-| `GET /api/v1/orders` | List orders (`?market_id=`, `?open_only=true`) |
+| `GET /api/v1/orders` | List newest-first orders (`?market_id=`, `?open_only=true`, `?status=`, `?side=`, `?limit=`) |
 | `POST /api/v1/orders` | Submit a limit or market order |
 | `DELETE /api/v1/orders/:id` | Cancel an open order |
+| `GET /api/v1/trades` | Global fills tape (`?market_id=`, `?limit=`) |
+| `GET /api/v1/alerts` | Evaluate and list persistent price alerts |
+| `POST /api/v1/alerts` | Create a mark-price alert |
+| `DELETE /api/v1/alerts/:id` | Delete a price alert |
 | `WS /ws/markets` | Live market snapshots and price ticks |
 
 Environment variables are read from the repo-root `.env` (see `.env.example`). Only `PORT` is commonly changed for local dev.
+
+### Operator desk
+
+Open `/orders` to view the cross-market order blotter, filter by market/status/side, cancel open orders, inspect matching-engine fills, and create or delete price alerts. `GET /api/v1/orders` accepts `market_id`, `open_only`, `status` (`open`, `partially_filled`, `filled`, or `cancelled`), `side` (`buy` or `sell`), and `limit` (default 50, maximum 200). Orders are returned newest first. `GET /api/v1/trades` accepts optional `market_id` and `limit` (default 50, maximum 200) and returns the newest fills across markets when no market is specified.
+
+Price alerts are stored locally in `client/data/price_alerts.json` (ignored by Git; intended for local development, not a production database). `GET /api/v1/alerts` evaluates active alerts against current market `mark_price` values, persists newly triggered alerts, and returns their trigger time and price. The dashboard Desk strip polls fills and alerts independently every five seconds; the `/orders` view refreshes its data at the same interval.
+
+To demo the operator workflow, start the app, place compatible limit orders on `/trade/btc-usdt` so the matching engine records fills, then inspect `/orders` and `/dashboard`. To exercise alert triggering, create an alert near the live market price and revisit or wait for the alert list refresh; evaluation occurs when the alerts API is read, not on every WebSocket tick.
 
 ---
 

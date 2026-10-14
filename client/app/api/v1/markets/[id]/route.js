@@ -3,7 +3,7 @@ import { getMarketEngine, getMatchingEngine } from "../../../../../lib/engines.j
 import { mergeBookWithResting, mergeTrades, quoteDp } from "../../../../../lib/merge.js";
 
 export async function GET(_req, { params }) {
-  const id = params.id;
+  const id = (await params).id;
   const d = getMarketEngine().detail(id);
   if (!d) return new NextResponse("not found", { status: 404 });
 

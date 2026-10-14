@@ -316,9 +316,32 @@ export class MatchingEngine {
     const out = [];
     for (let i = g.trades.length - 1; i >= 0 && out.length < limit; i--) {
       const t = g.trades[i];
-      if (t.market_id === marketId) out.push({ ...t });
+      if (!marketId || t.market_id === marketId) out.push({ ...t });
     }
     return out;
+  }
+
+  /**
+   * @param {{ marketId?: string; openOnly?: boolean; status?: OrderStatusStr; side?: SideStr; limit?: number }} options
+   */
+  async queryOrders(options = {}) {
+    const statuses = new Set(["open", "partially_filled", "filled", "cancelled"]);
+    const sides = new Set(["buy", "sell"]);
+    if (options.status && !statuses.has(options.status)) {
+      throw new MatchError("BAD_REQUEST", "invalid status");
+    }
+    if (options.side && !sides.has(options.side)) {
+      throw new MatchError("BAD_REQUEST", "side must be buy or sell");
+    }
+    const limit = options.limit ?? 50;
+    if (!Number.isInteger(limit) || limit < 1) {
+      throw new MatchError("BAD_REQUEST", "limit must be a positive integer");
+    }
+
+    let orders = await this.listOrders(options.marketId, options.openOnly ?? false);
+    if (options.status) orders = orders.filter((o) => o.status === options.status);
+    if (options.side) orders = orders.filter((o) => o.side === options.side);
+    return orders.slice(0, Math.min(limit, 200));
   }
 
   /**
@@ -327,6 +350,9 @@ export class MatchingEngine {
    */
   async listOrders(marketId, openOnly) {
     const g = this.inner;
+    const insertionOrder = new Map(
+      [...g.orders.keys()].map((id, index) => [id, index])
+    );
     let v = [...g.orders.values()].filter((o) =>
       marketId ? o.market_id === marketId : true
     );
@@ -337,7 +363,10 @@ export class MatchingEngine {
           o.size_remaining > 1e-12
       );
     }
-    v.sort((a, b) => a.created_at - b.created_at);
+    v.sort((a, b) =>
+      b.created_at - a.created_at ||
+      (insertionOrder.get(b.id) ?? 0) - (insertionOrder.get(a.id) ?? 0)
+    );
     return v;
   }
 }

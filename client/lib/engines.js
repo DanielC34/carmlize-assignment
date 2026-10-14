@@ -15,3 +15,8 @@ export function getMatchingEngine() {
   if (!globalThis._matchingEngine) throw new Error("MatchingEngine not ready");
   return globalThis._matchingEngine;
 }
+
+export function getPriceAlertStore() {
+  if (!globalThis._priceAlertStore) throw new Error("PriceAlertStore not ready");
+  return globalThis._priceAlertStore;
+}

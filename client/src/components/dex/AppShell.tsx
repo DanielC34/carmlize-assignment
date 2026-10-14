@@ -15,6 +15,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { href: "/dashboard", label: "Intelligence", exact: false },
     { href: "/markets", label: "Markets", exact: false },
+    { href: "/orders", label: "Desk", exact: false },
   ];
 
   const isActive = (href: string, exact: boolean) => {

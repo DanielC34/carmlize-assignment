@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getMarketEngine, getMatchingEngine } from "../../../../lib/engines.js";
 import { quoteDp, formatPrice } from "../../../../lib/merge.js";
-import { MatchError } from "../../../../lib/matchingEngine.js";
+import { parseLimit } from "../../../../lib/deskQueries.js";
 
 function quoteDecimalsForQuote(quote) {
   switch (quote) {
@@ -30,17 +30,36 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const marketId = searchParams.get("market_id") ?? undefined;
   const openOnly = searchParams.get("open_only") === "true" || searchParams.get("open_only") === "1";
-  const list = await getMatchingEngine().listOrders(marketId, openOnly);
-  let decimals = 8;
-  if (marketId) {
-    const d = getMarketEngine().detail(marketId.trim());
-    decimals = d ? quoteDecimalsForQuote(d.quote) : 4;
+  const statusValue = searchParams.get("status")?.toLowerCase();
+  const sideValue = searchParams.get("side")?.toLowerCase();
+  try {
+    const limit = parseLimit(searchParams.get("limit"));
+    const list = await getMatchingEngine().queryOrders({
+      marketId,
+      openOnly,
+      status: statusValue || undefined,
+      side: sideValue || undefined,
+      limit,
+    });
+    let decimals = 8;
+    if (marketId) {
+      const d = getMarketEngine().detail(marketId.trim());
+      decimals = d ? quoteDecimalsForQuote(d.quote) : 4;
+    }
+    return NextResponse.json({ orders: list.map((o) => orderToJson(o, decimals)) });
+  } catch (error) {
+    if (isMatchError(error)) {
+      return new NextResponse(error.message, { status: error.code === "BAD_REQUEST" ? 400 : 404 });
+    }
+    throw error;
   }
-  return NextResponse.json({ orders: list.map((o) => orderToJson(o, decimals)) });
 }
 
 export async function POST(req) {
   const body = await req.json().catch(() => ({}));
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return new NextResponse("request body must be a JSON object", { status: 400 });
+  }
   const sideRaw = String(body.side ?? "").toLowerCase();
   const side = sideRaw === "buy" ? "buy" : sideRaw === "sell" ? "sell" : null;
   if (!side) return new NextResponse("side must be buy or sell", { status: 400 });
@@ -49,13 +68,13 @@ export async function POST(req) {
   const orderType = otRaw === "limit" ? "limit" : otRaw === "market" ? "market" : null;
   if (!orderType) return new NextResponse("order_type must be limit or market", { status: 400 });
 
-  const size = Number.parseFloat(String(body.size ?? "").trim());
-  if (!Number.isFinite(size)) return new NextResponse("invalid size", { status: 400 });
+  const size = Number(body.size);
+  if (!Number.isFinite(size) || size <= 0) return new NextResponse("size must be a positive number", { status: 400 });
 
   let price = null;
   if (body.price != null && String(body.price).trim() !== "") {
-    price = Number.parseFloat(String(body.price).trim());
-    if (!Number.isFinite(price)) return new NextResponse("invalid price", { status: 400 });
+    price = Number(body.price);
+    if (!Number.isFinite(price) || price <= 0) return new NextResponse("price must be a positive number", { status: 400 });
   }
 
   const mid = String(body.market_id ?? "").trim();
@@ -68,9 +87,15 @@ export async function POST(req) {
     const { order, trades } = await getMatchingEngine().submit(mid, side, orderType, price, size, now);
     return NextResponse.json({ order: orderToJson(order, decimals), trades: trades.map((t) => tradeToJson(t, decimals)) });
   } catch (e) {
-    if (e instanceof MatchError) {
+    if (isMatchError(e)) {
       return new NextResponse(e.message, { status: e.code === "BAD_REQUEST" ? 400 : 404 });
     }
     throw e;
   }
+}
+
+function isMatchError(error) {
+  return error != null && typeof error === "object" &&
+    (error.code === "BAD_REQUEST" || error.code === "NOT_FOUND") &&
+    typeof error.message === "string";
 }

@@ -26,11 +26,13 @@ function openBrowser(url) {
 
 import { MarketEngine } from "./lib/marketEngine.js";
 import { createMatchingEngine } from "./lib/matchingEngine.js";
+import { createPriceAlertStore } from "./lib/priceAlerts.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT ?? "3000", 10);
 const matchingPath = path.join(__dirname, "data/matching_state.json");
+const alertsPath = path.join(__dirname, "data/price_alerts.json");
 
 // ── Initialise singletons on globalThis before Next.js boots ─────────────────
 if (!globalThis._marketEngine) {
@@ -38,6 +40,9 @@ if (!globalThis._marketEngine) {
 }
 if (!globalThis._matchingEngine) {
   globalThis._matchingEngine = createMatchingEngine(matchingPath);
+}
+if (!globalThis._priceAlertStore) {
+  globalThis._priceAlertStore = createPriceAlertStore(alertsPath);
 }
 
 const marketEngine = globalThis._marketEngine;

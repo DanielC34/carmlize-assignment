@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getMarketEngine, getMatchingEngine } from "../../../../../lib/engines.js";
 import { buildDashboardSummary } from "../../../../../lib/dashboardSummary.js";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const summary = await buildDashboardSummary(getMarketEngine(), getMatchingEngine());

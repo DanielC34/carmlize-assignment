@@ -3,6 +3,8 @@ import { getMarketEngine, getMatchingEngine } from "../../../../../lib/engines.j
 import { buildDashboardSummary } from "../../../../../lib/dashboardSummary.js";
 import { generateMarketBrief } from "../../../../../lib/aiBrief.js";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));

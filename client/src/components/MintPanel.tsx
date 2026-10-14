@@ -11,8 +11,9 @@ function isZeroAddr(a: string) {
 export function MintPanel({ cfg }: { cfg: ApiConfig }) {
   const { address, walletChainId, publicClient, walletClient, chain, requestConnect } = useWallet();
   const [ethIn, setEthIn] = useState("0.01");
-  const tokenAddress = cfg.zync_token_address as `0x${string}`;
-  const tokenReady = !isZeroAddr(cfg.zync_token_address);
+  const configuredTokenAddress = cfg.zync_token_address ?? "";
+  const tokenAddress = configuredTokenAddress as `0x${string}`;
+  const tokenReady = !isZeroAddr(configuredTokenAddress);
   const wrongChain = Boolean(address) && walletChainId !== undefined && walletChainId !== cfg.chain_id;
 
   const [mintPriceWei, setMintPriceWei] = useState<bigint | undefined>();

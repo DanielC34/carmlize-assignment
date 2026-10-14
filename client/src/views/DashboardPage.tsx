@@ -31,6 +31,93 @@ type AiBriefResponse = {
   generated_at: number;
 };
 
+type DeskTrade = { id: number; market_id: string; taker_side: "buy" | "sell"; price: string; ts: number };
+type DeskAlert = { status: "active" | "triggered" };
+
+function DeskStrip({ openOrdersCount }: { openOrdersCount: number }) {
+  const [trades, setTrades] = useState<DeskTrade[]>([]);
+  const [markets, setMarkets] = useState<Record<string, string>>({});
+  const [triggeredCount, setTriggeredCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadDesk = useCallback(async () => {
+    const [tradeResult, alertResult, marketResult] = await Promise.allSettled([
+      fetch("/api/v1/trades?limit=5").then(async (response) => {
+        if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);
+        return response.json() as Promise<{ trades: DeskTrade[] }>;
+      }),
+      fetch("/api/v1/alerts").then(async (response) => {
+        if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);
+        return response.json() as Promise<{ alerts: DeskAlert[] }>;
+      }),
+      fetch("/api/v1/markets").then(async (response) => {
+        if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);
+        return response.json() as Promise<{ markets: CompactMarket[] }>;
+      }),
+    ]);
+    const errors: string[] = [];
+    if (tradeResult.status === "fulfilled") setTrades(tradeResult.value.trades);
+    else errors.push(`Fills: ${tradeResult.reason instanceof Error ? tradeResult.reason.message : "unavailable"}`);
+    if (alertResult.status === "fulfilled") {
+      setTriggeredCount(alertResult.value.alerts.filter((alert) => alert.status === "triggered").length);
+    } else errors.push(`Alerts: ${alertResult.reason instanceof Error ? alertResult.reason.message : "unavailable"}`);
+    if (marketResult.status === "fulfilled") {
+      setMarkets(Object.fromEntries(marketResult.value.markets.map((market) => [market.id, market.pair])));
+    } else errors.push(`Markets: ${marketResult.reason instanceof Error ? marketResult.reason.message : "unavailable"}`);
+    setError(errors.length ? errors.join(" · ") : null);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    void loadDesk();
+    const interval = window.setInterval(loadDesk, 5000);
+    return () => window.clearInterval(interval);
+  }, [loadDesk]);
+
+  return (
+    <section className="dash-rise mb-8 border border-white/[0.08] bg-[rgba(8,12,18,0.72)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-4">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#60a5fa]">Operator desk</p>
+          <h2 className="mt-1 font-display text-lg font-semibold text-white">Desk activity</h2>
+        </div>
+        <Link href="/orders" className="border border-[#3b82f6]/40 px-3 py-2 text-xs font-semibold text-[#93c5fd] hover:bg-[#3b82f6]/10">
+          Open orders &amp; alerts
+        </Link>
+      </div>
+      <div className="grid divide-y divide-white/[0.06] md:grid-cols-[160px_160px_minmax(0,1fr)] md:divide-x md:divide-y-0">
+        <div className="px-5 py-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.13em] text-white/35">Open orders</p>
+          <p className="mt-2 font-display text-2xl font-semibold text-white">{openOrdersCount}</p>
+        </div>
+        <div className="px-5 py-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.13em] text-white/35">Triggered alerts</p>
+          <p className="mt-2 font-display text-2xl font-semibold text-[#93c5fd]">{loading ? "…" : triggeredCount}</p>
+        </div>
+        <div className="min-w-0 px-5 py-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.13em] text-white/35">Latest fills</p>
+          {loading && trades.length === 0 ? <p className="mt-3 text-sm text-white/35">Loading desk activity…</p> : null}
+          {!loading && trades.length === 0 && !error ? <p className="mt-3 text-sm text-white/35">No fills yet. Matching-engine executions will appear here.</p> : null}
+          {trades.length > 0 ? (
+            <ul className="mt-2 divide-y divide-white/[0.05]">
+              {trades.map((trade) => (
+                <li key={trade.id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2 text-xs">
+                  <span className="font-semibold text-white/80">{markets[trade.market_id] ?? trade.market_id.toUpperCase()}</span>
+                  <span className={trade.taker_side === "buy" ? "text-[#60a5fa]" : "text-[#f07178]"}>{trade.taker_side.toUpperCase()}</span>
+                  <span className="font-mono text-white/65">{trade.price}</span>
+                  <time className="text-white/35">{new Date(trade.ts * 1000).toLocaleTimeString()}</time>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      </div>
+      {error ? <p role="status" className="border-t border-[#e8b84a]/15 px-5 py-2.5 text-xs text-[#e8b84a]">Desk refresh issue: {error}</p> : null}
+    </section>
+  );
+}
+
 function fmtVol(n: number) {
   if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
   if (n >= 1e6) return `$${(n / 1e6).toFixed(2)}M`;
@@ -341,6 +428,8 @@ export function DashboardPage() {
                 delay={220}
               />
             </div>
+
+            <DeskStrip openOrdersCount={summary.open_orders_count} />
 
             <section
               className="dash-rise mb-8 grid gap-4 border border-white/[0.07] p-5 md:grid-cols-3"

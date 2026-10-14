@@ -6,6 +6,7 @@ package-lock.json
 # Next.js build output
 client/.next/
 client/out/
+client/data/price_alerts.json
 
 # Vite
 client/vite.config.ts.timestamp-*.mjs
@@ -13,4 +14,3 @@ client/vite.config.ts.timestamp-*.mjs
 # Temp files
 temp_*.txt
 MIGRATION_*.md
-

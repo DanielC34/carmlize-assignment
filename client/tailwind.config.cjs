@@ -13,11 +13,4 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('animatecss-tailwind-adapter')({
-      duration: '200ms',
-      delay: '1s',
-      iterationCount: '4'
-    })
-  ],
 };
