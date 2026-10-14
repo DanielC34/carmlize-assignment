@@ -2,6 +2,7 @@ node_modules
 dist
 .env
 package-lock.json
+/.npmrc
 
 # Next.js build output
 client/.next/
